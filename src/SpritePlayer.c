@@ -2,6 +2,7 @@
 #include "main.h"
 #include "Keys.h"
 #include "SpriteManager.h"
+#include "ZGBMain.h"
 UINT8 bank_SPRITE_PLAYER = 2;
 
 typedef enum {
@@ -21,6 +22,9 @@ void Start_SPRITE_PLAYER() {
 }
 
 void Update_SPRITE_PLAYER() {
+
+	UINT8 i;
+	struct Sprite* spr;
 
 	switch (player_state)
 	{
@@ -58,6 +62,14 @@ void Update_SPRITE_PLAYER() {
 		player_accel_y = 0;
 		if (player_state == JUMPING) {
 			player_state = NORMAL;
+		}
+	}
+
+	SPRITEMANAGER_ITERATE(i, spr) {
+		if (spr->type == SPRITE_ENEMY) {
+			if (CheckCollision(THIS, spr)) {
+				SetState(STATE_GAME);
+			}
 		}
 	}
 }
